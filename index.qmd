@@ -1,0 +1,162 @@
+---
+title: "Sereina Graber, PhD"
+subtitle: "data & R enthusiast"
+date: 2024-24-01
+format: revealjs
+editor: visual
+---
+
+
+
+```{r}
+library(tidyverse)
+library(highcharter)
+library(lubridate)
+library(magrittr)
+```
+
+
+
+## CV in a Plot
+
+<br>
+
+```{r}
+
+# CV data ----------------------------------------------------------------------
+activity.studies <- c("Bsc Biology", "Msc Biology (Anthropology)", "Msc Biostatistics", "PhD Biology (Anthropology)", "Academic Background")
+activity.work <- c("Biostatistician USZ, KSA", "Data Scientist - Sanitas", "Data Scientist - Helsana", "Work Experience")
+activity.skills <- c("R", "SQL", "Skills")
+activity <- c(activity.studies, activity.work, activity.skills)
+chapter = c(rep("Academic Background", length(activity.studies)), 
+            rep("Work Experience", length(activity.work)), 
+            rep("Skills", length(activity.skills))
+)
+d.cv <- tibble(chapter = chapter,
+               activity = factor(activity, levels = activity),
+               start_date = as.Date(c('2007-09-01', '2010-09-01', '2012-09-01', '2013-08-01', NA, '2012-03-01', '2017-08-01', '2019-08-01', NA, '2010-09-01', '2017-08-01', NA), format = "%Y-%m-%d"),
+               end_date = as.Date(c('2010-05-01', '2012-05-01', '2015-05-01', '2017-07-01', NA, '2016-07-01', '2019-07-01', '2024-03-01', NA, '2024-03-01', '2024-03-01', NA), format = "%Y-%m-%d")
+)
+
+
+d.cv.hc.0 <- d.cv %>% 
+    mutate_if(is.Date, datetime_to_timestamp) %>% 
+    filter(!is.na(start_date)) %>% droplevels() 
+
+d.cv.hc <- d.cv.hc.0 %>% 
+    mutate(progress = 0, cat = c(0, 1, 2, 3, 4, 5, 6, 7, 8)) %>% 
+    mutate(chapter = factor(chapter, levels = c('Academic Background', 'Work Experience', 'Skills')), 
+    chapter.col = as.factor(plyr::mapvalues(
+      chapter,
+      from = c(
+        "Academic Background",
+        "Work Experience",
+        "Skills"
+      ),
+      to = c("#FF0000", "#00A08A", "#F2AD00")
+    )
+  ))
+
+
+# CV plot ----------------------------------------------------------------------
+hchart(d.cv.hc,
+  type = "xrange",
+  hcaes(x = start_date, x2 = end_date, 
+        y = cat, name = activity,
+        group = chapter),color = levels(d.cv.hc$chapter.col),
+) %>% 
+  hc_xAxis(
+    title = FALSE, type = "datetime",
+    labels = list(style = list(fontSize = "16px"))
+  ) %>% 
+  hc_yAxis(
+    title = FALSE, labels = list(style = list(fontSize = "16px")),
+    categories = d.cv.hc$activity) %>%
+  hc_plotOptions(xrange = list(pointWidth = 40, grouping = FALSE, colorByPoint = FALSE),
+                 enableMouseTracking = FALSE, 
+                 column = list(dataLabels = list(enabled = TRUE))) 
+```
+
+
+
+
+## PhD Thesis
+
+Seasonality constrains brain size evolution among non-primate mammals
+
+::: {layout-ncol="2"}
+![](assets/images/SG_museum.png){fig-align="left" width="20%"}
+
+![](assets/images/Seasonality.png){fig-align="right" width="70%"}
+:::
+
+
+
+
+## PhD Thesis
+
+Ecology is the Main Driver of Primate Brain Size Evolution
+
+![](assets/images/Average_path_model.png){fig-align="right" width="80%"}
+
+
+
+## PhD Thesis {visibility="hidden"}
+
+Ecology is the Main Driver of Primate Brain Size Evolution
+
+![](assets/images/Figure_2.png){fig-align="center"}
+
+
+
+
+## Data Scientist @Sanitas {auto-animate="true"}
+
+::::: columns
+<br>
+
+::: {.column width="50%"}
+**Projects**
+
+-   Effectiveness of Case Management
+-   Chatbot
+-   Improve automatic claims verification
+:::
+
+::: {.column width="50%"}
+**Learnings**
+
+-   Technical skills
+-   Team work
+-   Get to know an organization
+:::
+:::::
+
+
+
+
+## Data Scientist @Helsana {auto-animate="true"}
+
+::::: columns
+<br>
+
+::: {.column width="50%"}
+**Projects**
+
+-   Technical infrastructure
+
+-   Medications during pregnancy
+
+-   Quality of care in ambulatory services
+
+-   Antibiotic consumption in Switzerland
+:::
+
+::: {.column width="50%"}
+**Learnings**
+
+-   Technical leadership
+-   Strategic thinking/ focus on bigger picture
+:::
+:::::
+
