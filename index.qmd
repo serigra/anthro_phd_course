@@ -7,7 +7,6 @@ subtitle: "Statistical Data Scientist <br>
  [{{< fa brands orcid >}} ](https://orcid.org/0009-0005-2128-0827)"
  
 footer: "05 02 2025 | Sereina Graber | github.com/serigra/anthro_phd_course"
-date: 05-02-2025
 format: revealjs
 editor: visual
 ---
