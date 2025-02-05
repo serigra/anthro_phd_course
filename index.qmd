@@ -1,7 +1,13 @@
 ---
 title: "Sereina Graber, PhD"
-subtitle: "data & R enthusiast"
-date: 2024-24-01
+
+subtitle: "Statistical Data Scientist <br>
+ [{{< fa brands github >}}](https://github.com/serigra) &nbsp; 
+ [{{< fa brands linkedin >}}](https://www.linkedin.com/in/sereina-maria-graber-078701bb/) &nbsp;  [{{< fa brands researchgate >}} ](https://www.researchgate.net/profile/Sereina-Graber) &nbsp;
+ [{{< fa brands orcid >}} ](https://orcid.org/0009-0005-2128-0827)"
+ 
+footer: "05 02 2025 | Sereina Graber | github.com/serigra/anthro_phd_course"
+date: 05-02-2025
 format: revealjs
 editor: visual
 ---
@@ -13,6 +19,9 @@ library(tidyverse)
 library(highcharter)
 library(lubridate)
 library(magrittr)
+
+source('assets/functions/CV_plot.R')
+source('assets/functions/CV_plot_hc.R')
 ```
 
 
@@ -35,17 +44,9 @@ chapter = c(rep("Academic Background", length(activity.studies)),
 d.cv <- tibble(chapter = chapter,
                activity = factor(activity, levels = activity),
                start_date = as.Date(c('2007-09-01', '2010-09-01', '2012-09-01', '2013-08-01', NA, '2012-03-01', '2017-08-01', '2019-08-01', NA, '2010-09-01', '2017-08-01', NA), format = "%Y-%m-%d"),
-               end_date = as.Date(c('2010-05-01', '2012-05-01', '2015-05-01', '2017-07-01', NA, '2016-07-01', '2019-07-01', '2024-03-01', NA, '2024-03-01', '2024-03-01', NA), format = "%Y-%m-%d")
-)
-
-
-d.cv.hc.0 <- d.cv %>% 
-    mutate_if(is.Date, datetime_to_timestamp) %>% 
-    filter(!is.na(start_date)) %>% droplevels() 
-
-d.cv.hc <- d.cv.hc.0 %>% 
-    mutate(progress = 0, cat = c(0, 1, 2, 3, 4, 5, 6, 7, 8)) %>% 
-    mutate(chapter = factor(chapter, levels = c('Academic Background', 'Work Experience', 'Skills')), 
+               end_date = as.Date(c('2010-05-01', '2012-05-01', '2015-05-01', '2017-07-01', NA, '2016-07-01', '2019-07-01', '2024-12-01', NA, '2024-12-01', '2024-12-01', NA), format = "%Y-%m-%d")
+) %>% 
+  mutate(chapter = factor(chapter, levels = c('Academic Background', 'Work Experience', 'Skills')), 
     chapter.col = as.factor(plyr::mapvalues(
       chapter,
       from = c(
@@ -58,26 +59,26 @@ d.cv.hc <- d.cv.hc.0 %>%
   ))
 
 
+d.cv.hc.0 <- d.cv %>% 
+    mutate_if(is.Date, datetime_to_timestamp) %>% 
+    filter(!is.na(start_date)) %>% droplevels() 
+
+d.cv.hc <- d.cv.hc.0 %>% 
+    mutate(progress = 0, cat = c(0, 1, 2, 3, 4, 5, 6, 7, 8)) 
+    
+
 # CV plot ----------------------------------------------------------------------
-hchart(d.cv.hc,
-  type = "xrange",
-  hcaes(x = start_date, x2 = end_date, 
-        y = cat, name = activity,
-        group = chapter),color = levels(d.cv.hc$chapter.col),
-) %>% 
-  hc_xAxis(
-    title = FALSE, type = "datetime",
-    labels = list(style = list(fontSize = "16px"))
-  ) %>% 
-  hc_yAxis(
-    title = FALSE, labels = list(style = list(fontSize = "16px")),
-    categories = d.cv.hc$activity) %>%
-  hc_plotOptions(xrange = list(pointWidth = 40, grouping = FALSE, colorByPoint = FALSE),
-                 enableMouseTracking = FALSE, 
-                 column = list(dataLabels = list(enabled = TRUE))) 
+cv_plot_hc(d.cv.hc)
 ```
 
 
+
+
+## CV in a Plot {visibility="hidden"}
+```{r}
+d.cv %>% 
+  cv_plot()
+```
 
 
 ## PhD Thesis
@@ -87,7 +88,7 @@ Seasonality constrains brain size evolution among non-primate mammals
 ::: {layout-ncol="2"}
 ![](assets/images/SG_museum.png){fig-align="left" width="20%"}
 
-![](assets/images/Seasonality.png){fig-align="right" width="70%"}
+![](assets/images/Seasonality.png){fig-align="right" width="50%"}
 :::
 
 
@@ -110,53 +111,83 @@ Ecology is the Main Driver of Primate Brain Size Evolution
 
 
 
-## Data Scientist @Sanitas {auto-animate="true"}
+## Data Scientist @Sanitas {.smaller}
 
 ::::: columns
 <br>
 
-::: {.column width="50%"}
+::: {.column width="60%"}
 **Projects**
 
--   Effectiveness of Case Management
--   Chatbot
--   Improve automatic claims verification
+-   Effectiveness of Case Management 📈
+-   Chatbot 🤖
+-   Improve automatic claims verification 📝
 :::
 
-::: {.column width="50%"}
+::: {.column width="40%"}
 **Learnings**
 
--   Technical skills
--   Team work
--   Get to know an organization
+-   technical skills 🛠️
+-   team work 👯
+-   get to know an organization 🏢
 :::
 :::::
 
 
 
 
-## Data Scientist @Helsana {auto-animate="true"}
+## Data Scientist @Helsana {.smaller}
 
 ::::: columns
 <br>
 
-::: {.column width="50%"}
+::: {.column width="70%"}
+**Responsibilities**
+
+- technical infrastructure 🛠️
+- data extraction & preparation ️⚙️
+- study design and statistical analyses 📉
+
+
 **Projects**
 
--   Technical infrastructure
+- antibiotic prescribing in Switzerland 💊
 
--   Medications during pregnancy
+- medication during pregnancy 🤰
 
--   Quality of care in ambulatory services
+- drivers and consequences of potentially inappropriate prescribing 
 
--   Antibiotic consumption in Switzerland
+
 :::
 
-::: {.column width="50%"}
+::: {.column width="30%"}
 **Learnings**
 
--   Technical leadership
--   Strategic thinking/ focus on bigger picture
+-   technical leadership 🛠️
+-   strategic thinking/ focus on bigger picture 🌅
 :::
 :::::
+
+
+## CV in a Plot
+<br>
+
+```{r}
+cv_plot_hc(d.cv.hc)
+```
+
+
+## Zurich R User Group
+
+<br>
+
+- [{{< fa brands meetup >}} meetup.com/de-DE/Zurich-R-User-Group/]()
+
+- [{{< fa solid globe >}} zurich-r-user-group.github.io/]()
+
+- [{{< fa brands linkedin >}} linkedin.com/company/zuerich-r-user-group/]()
+
+- [{{< fa brands bluesky >}} bsky.app/profile/ruserszurich.bsky.social]()
+
+
 
